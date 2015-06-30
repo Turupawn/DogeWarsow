@@ -1172,6 +1172,9 @@ void ClientUserinfoChanged( edict_t *ent, char *userinfo )
 */
 qboolean ClientConnect( edict_t *ent, char *userinfo, qboolean fakeClient, qboolean tvClient )
 {
+
+G_Printf( "Doge check if enough doges\n" );
+
 	char *value;
 	char message[MAX_STRING_CHARS];
 

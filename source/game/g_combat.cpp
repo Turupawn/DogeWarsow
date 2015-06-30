@@ -148,6 +148,9 @@ static bool G_CanSplashDamage( edict_t *targ, edict_t *inflictor, cplane_t *plan
 */
 void G_Killed( edict_t *targ, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point, int mod )
 {
+
+G_Printf( "Doge looser: %s.\n", targ->r.client->netname );
+G_Printf( "Doge winner: %s.\n", attacker->r.client->netname );
 	if( targ->health < -999 )
 		targ->health = -999;
 
