@@ -1173,15 +1173,13 @@ void ClientUserinfoChanged( edict_t *ent, char *userinfo )
 qboolean ClientConnect( edict_t *ent, char *userinfo, qboolean fakeClient, qboolean tvClient )
 {
 
-G_Printf( "Doge check if enough doges\n" );
-
 	char *value;
 	char message[MAX_STRING_CHARS];
 
 	assert( ent );
 	assert( userinfo && Info_Validate( userinfo ) );
 	assert( Info_ValueForKey( userinfo, "ip" ) && Info_ValueForKey( userinfo, "socket" ) );
-
+G_Printf( "Doge check if enough doges: %s\n", ent->r.client->netname );
 	// verify that server gave us valid data
 	if( !Info_Validate( userinfo ) )
 	{
@@ -1250,10 +1248,12 @@ G_Printf( "Doge check if enough doges\n" );
 
 	ClientUserinfoChanged( ent, userinfo );
 
-	Q_snprintfz( message, sizeof( message ), "%s%s XXconnected", ent->r.client->netname, S_COLOR_WHITE );
+G_Printf( "Doge check if enough doges: %s\n", ent->r.client->netname );
+
+	Q_snprintfz( message, sizeof( message ), "%s%s connected", ent->r.client->netname, S_COLOR_WHITE );
 	G_PrintMsg( NULL, "%s\n", message );
 
-	G_Printf( "%s%s XXcodnected from %s\n", ent->r.client->netname, S_COLOR_WHITE, ent->r.client->ip );
+	G_Printf( "%s%s codnected from %s\n", ent->r.client->netname, S_COLOR_WHITE, ent->r.client->ip );
 
 	// let the gametype scripts know this client just connected
 	G_Gametype_ScoreEvent( ent->r.client, "connect", NULL );
