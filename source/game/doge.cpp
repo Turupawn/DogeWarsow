@@ -1,19 +1,23 @@
-#include "utility.h"
+#include "doge.h"
 
-
-/*
-MString toMString(std::string str)
+////////////////////////////////////////
+////////////////////////////////////////
+////////////////////////////////////////
+std::string toString(int number)
 {
-    MString return_value;
-    for (int i=0; i<(int)str.length(); i++)
-        return_value+=str[i];
-    return return_value;
+    if (number == 0)
+        return "0";
+    std::string temp="";
+    std::string returnvalue="";
+    while (number>0)
+    {
+        temp+=number%10+48;
+        number/=10;
+    }
+    for (int i=0; i<(int)temp.length(); i++)
+        returnvalue+=temp[temp.length()-i-1];
+    return returnvalue;
 }
-MString toMString(int num)
-{
-    return toMString(toString(num));
-}
-
 ////////////////////////////// FILES
 void readIntFromFile(char* file_path, int* output)
 {
@@ -45,7 +49,7 @@ void writeStringToFile(char* file_path, char* str)
 }
 
 ///////////////////////////////DOGE
-string dogeDeposit(string character)
+std::string dogeDeposit(std::string character)
 {
     int system_return=-1;
     std::transform(character.begin(), character.end(), character.begin(), ::tolower);
@@ -71,7 +75,7 @@ string dogeDeposit(string character)
     readStringFromFile(file_path,doge_address);
     return doge_address;
 }
-string dogeBalance(string character)
+std::string dogeBalance(std::string character)
 {
     int system_return=-1;
     std::transform(character.begin(), character.end(), character.begin(), ::tolower);
@@ -103,7 +107,7 @@ string dogeBalance(string character)
     readIntFromFile(file_path_deposits,&deposits);
     return toString(balance+deposits)+"Ð";
 }
-string dogeWithdraw(string character, int amount, string address)
+std::string dogeWithdraw(std::string character, int amount, std::string address)
 {
     int system_return=-1;
     std::transform(character.begin(), character.end(), character.begin(), ::tolower);
@@ -154,7 +158,7 @@ string dogeWithdraw(string character, int amount, string address)
     writeIntToFile(file_path, balance-amount-1);
     return toString(amount) + "Ð sent to " + address;
 }
-string dogeTip(string character, int amount, string character_to)
+std::string dogeTip(std::string character, int amount, std::string character_to)
 {
     int system_return=-1;
     std::transform(character.begin(), character.end(), character.begin(), ::tolower);
@@ -208,4 +212,6 @@ string dogeTip(string character, int amount, string character_to)
     writeIntToFile(file_path_receiver, balance_receiver);
     return toString(amount) + "Ð sent to " + character_to;
 }
-*/
+////////////////////////////////////////
+////////////////////////////////////////
+////////////////////////////////////////
