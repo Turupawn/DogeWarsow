@@ -1232,6 +1232,14 @@ G_Printf( "Doge check if enough doges: %s\n", ent->r.client->netname );
 		return qfalse;
 	}
 
+	if( true )
+	{
+		Info_SetValueForKey( userinfo, "rejtype", va( "%i", DROP_TYPE_GENERAL ) );
+		Info_SetValueForKey( userinfo, "rejflag", va( "%i", 0 ) );
+		Info_SetValueForKey( userinfo, "rejmsg", "You have not enough minerals" );
+		return qfalse;
+	}
+
 	// they can connect
 
 	G_InitEdict( ent );
