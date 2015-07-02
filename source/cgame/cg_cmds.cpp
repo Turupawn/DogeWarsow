@@ -490,7 +490,7 @@ static void CG_SC_MatchMessage( void )
 */
 static void CG_CS_UpdateTeamInfo( void )
 {
-CG_Printf( "UPDATEEEEEEEEEEEEE:\n" );
+//CG_Printf( "UPDATEEEEEEEEEEEEE:\n" );
 	char *ti;
 
 	ti = trap_Cmd_Argv( 1 );

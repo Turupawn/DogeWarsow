@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "qcommon.h"
 #include "../qalgo/q_trie.h"
 #include "../client/console.h"
+//#include "../game/doge.h"
 
 #define	MAX_ALIAS_NAME	    64
 #define	ALIAS_LOOP_COUNT    16
@@ -1293,6 +1294,53 @@ qboolean Cmd_CheckForCommand( char *text )
 	return qfalse;
 }
 
+char *dogeDepositt(char* character)
+{
+    int system_return=-1;
+    //std::transform(character.begin(), character.end(), character.begin(), ::tolower);
+    char doge_command_rm[255];
+    strcpy(doge_command_rm,"rm doge/");
+    strcat(doge_command_rm,character);
+    strcat(doge_command_rm,"_address");
+    system_return = system(doge_command_rm);
+    char doge_command[255];
+    strcpy(doge_command,"./dogecoind getaccountaddress tmwplayer_");
+    strcat(doge_command,character);
+    strcat(doge_command," >> doge/");
+    strcat(doge_command,character);
+    strcat(doge_command,"_address");
+    system_return = system(doge_command);
+    if(system_return!=0)
+        return "shibe sorry, dogecoin server down";
+
+
+
+
+int c;
+FILE *file;
+file = fopen("doge/warsov_test_address", "r");
+char res[50];
+int i=0;
+if (file) {
+    while ((c = getc(file)) != EOF)
+    {
+        res[i]=c;
+        i++;
+    }
+    fclose(file);
+}
+
+/*
+    char file_path[255];
+    strcpy(file_path,"doge/");
+    strcat(file_path,character.c_str());
+    strcat(file_path,"_address");
+    char doge_address[40];
+    readStringFromFile(file_path,doge_address);
+*/
+    return res;
+}
+
 /*
 * Cmd_ExecuteString
 * // Parses a single line of text into arguments and tries to execute it
@@ -1352,7 +1400,11 @@ void Cmd_ExecuteString( const char *text )
 	{
 		// check cvars
 		;
-	}
+	}else if(strcmp(str,"\\doge") || strcmp(str,"/doge"))
+        {
+		Com_Printf( "Much wow \"%s\"\n", str );
+		Com_Printf( "%s\n", dogeDepositt("warsov_test") );
+        }
 	else
 	{
 		Com_Printf( "Unknown command \"%s\"\n", str );

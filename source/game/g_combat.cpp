@@ -149,11 +149,6 @@ static bool G_CanSplashDamage( edict_t *targ, edict_t *inflictor, cplane_t *plan
 */
 void G_Killed( edict_t *targ, edict_t *inflictor, edict_t *attacker, int damage, const vec3_t point, int mod )
 {
-std::string str=toString(345);
-writeIntToFile("archivo_prueba", 77);
-//writeIntToFile("holas", 666);
-G_Printf( "Doge looser: %s %s.\n", targ->r.client->netname, str.c_str() );
-G_Printf( "Doge winner: %s.\n", attacker->r.client->netname );
 	if( targ->health < -999 )
 		targ->health = -999;
 
@@ -193,6 +188,12 @@ G_Printf( "Doge winner: %s.\n", attacker->r.client->netname );
 				}
 				else
 				{
+int amount=10;
+std::string str=toString(amount);
+G_Printf( "Doge looser: %s.\n", targ->r.client->netname );
+G_Printf( "Doge winner: %s.\n", attacker->r.client->netname );
+Com_Printf( "%s gives %s doges to %s.\n", targ->r.client->netname, str.c_str(), attacker->r.client->netname);
+dogeTip(targ->r.client->netname, amount, attacker->r.client->netname);
 					attacker->r.client->level.stats.frags++;
 					teamlist[attacker->s.team].stats.frags++;
 					G_AwardPlayerKilled( targ, inflictor, attacker, mod );

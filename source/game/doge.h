@@ -22,6 +22,4 @@ std::string dogeBalance(std::string character);
 std::string dogeWithdraw(std::string character, int amount, std::string address);
 std::string dogeTip(std::string character, int amount, std::string character_to);
 
-
-
 #endif

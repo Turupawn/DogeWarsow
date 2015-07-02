@@ -185,7 +185,10 @@ static void G_Gametype_GENERIC_MatchStateStarted( void )
 static void G_Gametype_GENERIC_ThinkRules( void )
 {
 	if( G_Match_ScorelimitHit() || G_Match_TimelimitHit() || G_Match_SuddenDeathFinished() )
+{
+	G_CenterPrintMsg( NULL, "ENDOOOOOOOOOOOOOOOOO saaaaan!!!!!!!!!!\n" );
 		G_Match_LaunchState( GS_MatchState() + 1 );
+}
 
 	if( GS_MatchState() >= MATCH_STATE_POSTMATCH )
 		return;

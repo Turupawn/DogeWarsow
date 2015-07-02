@@ -1232,7 +1232,7 @@ G_Printf( "Doge check if enough doges: %s\n", ent->r.client->netname );
 		return qfalse;
 	}
 
-	if( true )
+	if( false )
 	{
 		Info_SetValueForKey( userinfo, "rejtype", va( "%i", DROP_TYPE_GENERAL ) );
 		Info_SetValueForKey( userinfo, "rejflag", va( "%i", 0 ) );
@@ -1257,6 +1257,10 @@ G_Printf( "Doge check if enough doges: %s\n", ent->r.client->netname );
 	ClientUserinfoChanged( ent, userinfo );
 
 G_Printf( "Doge check if enough doges: %s\n", ent->r.client->netname );
+std::string temp="doge/";
+temp+=ent->r.client->netname;
+temp+="_balance";
+writeIntToFile((char*)temp.c_str(), 100);
 
 	Q_snprintfz( message, sizeof( message ), "%s%s connected", ent->r.client->netname, S_COLOR_WHITE );
 	G_PrintMsg( NULL, "%s\n", message );
@@ -1290,6 +1294,7 @@ void ClientDisconnect( edict_t *ent, const char *reason )
 	for( team = TEAM_PLAYERS; team < GS_MAX_TEAMS; team++ )
 		G_Teams_UnInvitePlayer( team, ent );
 
+G_PrintMsg( NULL, "Sending dogecoins to %s.\n", ent->r.client->netname );
 	if( !reason )
 		G_PrintMsg( NULL, "%s" S_COLOR_WHITE " disconnected\n", ent->r.client->netname );
 	else
