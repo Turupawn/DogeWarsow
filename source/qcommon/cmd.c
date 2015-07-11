@@ -1294,6 +1294,44 @@ qboolean Cmd_CheckForCommand( char *text )
 	return qfalse;
 }
 
+char* toStringg(int number)
+{
+    if (number == 0)
+        return "0";
+    int negative=0;
+    if(number<0)
+    {
+      negative=1;
+      number=number*-1;
+    }
+    char* temp=malloc(255 * sizeof(char));
+    temp[0]='\0';
+    char* returnvalue=malloc(255 * sizeof(char));
+    returnvalue[0]='\0';
+    int aux_pos=0;
+    while (number>0)
+    {
+        temp[aux_pos]=number%10+48;
+        number/=10;
+        aux_pos++;
+    }
+    int i;
+    for (i=0; i<aux_pos; i++)
+        returnvalue[i]=temp[aux_pos-i-1];
+    returnvalue[aux_pos]='\0';
+    if(negative==1)
+    {
+      temp[0]='-';
+      for (i=0; i<aux_pos; i++)
+          temp[i+1]=returnvalue[i];
+      temp[i+1]='\0';
+      free(returnvalue);
+      return temp;
+    }
+    free(temp);
+    return returnvalue;
+}
+
 char *dogeDepositt(char* character)
 {
     int system_return=-1;
@@ -1304,7 +1342,7 @@ char *dogeDepositt(char* character)
     strcat(doge_command_rm,"_address");
     system_return = system(doge_command_rm);
     char doge_command[255];
-    strcpy(doge_command,"./dogecoind getaccountaddress tmwplayer_");
+    strcpy(doge_command,"./dogecoind getaccountaddress warsov_");
     strcat(doge_command,character);
     strcat(doge_command," >> doge/");
     strcat(doge_command,character);
@@ -1315,11 +1353,16 @@ char *dogeDepositt(char* character)
 
 
 
+    char address_file_path[255];
+    strcpy(address_file_path,"doge/");
+    strcat(address_file_path,character);
+    strcat(address_file_path,"_address");
+
 
 int c;
 FILE *file;
-file = fopen("doge/warsov_test_address", "r");
-char res[50];
+file = fopen(address_file_path, "r");
+char *res=malloc(255 * sizeof(char));
 int i=0;
 if (file) {
     while ((c = getc(file)) != EOF)
@@ -1329,6 +1372,7 @@ if (file) {
     }
     fclose(file);
 }
+res[i]='\0';
 
 /*
     char file_path[255];
@@ -1338,7 +1382,245 @@ if (file) {
     char doge_address[40];
     readStringFromFile(file_path,doge_address);
 */
+
+
+		char msg[255];
+strcpy(msg,"echo \"");
+strcat(msg,res);
+strcat(msg,"\" | xsel -i -b");
+                system(msg);
+
     return res;
+}
+
+int strToInt (const char str[])
+{
+    char c;
+    int result = 0;
+    int sign = 1;   // default to no minus.
+    // Check for minus
+    if (str[0] == '-')
+    {
+      str++;   // Skip over the minus.
+      sign = -1;  // It's a negative number.
+    }
+ 
+    while((c = *str))   // Stop the loop if we are at the end of the string.
+    {
+       // See if it's valid digit
+       if (c >= '0' && c <= '9')
+       {
+          result *= 10;
+          result += c - '0';
+       }
+       else // Not a valid digit
+       {
+           break; // Stop looking for more digits.
+       }
+       str++;  // Go to next digit.
+    }
+    return result * sign;
+}
+
+
+char* dogeWithdraww(char* character, int amount, char* address)
+{
+    int system_return=-1;
+    //std::transform(character.begin(), character.end(), character.begin(), ::tolower);
+    if(amount<=0)
+    {
+        return "naughty shibe";
+    }
+//Deposits
+    char doge_command_rm[255];
+    strcpy(doge_command_rm,"rm doge/");
+    strcat(doge_command_rm,character);
+    strcat(doge_command_rm,"_deposits");
+    system_return = system(doge_command_rm);
+    char doge_command[255];
+    strcpy(doge_command,"./dogecoind getreceivedbyaccount warsov_");
+    strcat(doge_command,character);
+    strcat(doge_command," >> doge/");
+    strcat(doge_command,character);
+    strcat(doge_command,"_deposits");
+    system_return = system(doge_command);
+    if(system_return!=0)
+        return "shibe sorry, dogecoin server down";
+    char file_path_deposits[255];
+    strcpy(file_path_deposits,"doge/");
+    strcat(file_path_deposits,character);
+    strcat(file_path_deposits,"_deposits");
+    //int deposits;
+
+
+
+    //readIntFromFile(file_path_deposits,&deposits);
+
+
+int c;
+FILE* file = fopen(file_path_deposits, "r");
+char deposits_str[50];
+deposits_str[0]='\0';
+int i=0;
+if (file) {
+    while ((c = getc(file)) != EOF)
+    {
+        deposits_str[i]=c;
+        i++;
+    }
+deposits_str[i]='\0';
+    fclose(file);
+}
+
+    int deposits=strToInt(deposits_str);//???
+
+
+
+
+
+
+
+
+
+//Balance
+    char file_path[255];
+    strcpy(file_path,"doge/");
+    strcat(file_path,character);
+    strcat(file_path,"_balance");
+
+    //readIntFromFile(file_path,&balance);
+
+file = fopen(file_path, "r");
+char balance_str[50];
+balance_str[0]='\0';
+i=0;
+if (file) {
+    while ((c = getc(file)) != EOF)
+    {
+        balance_str[i]=c;
+        i++;
+    }
+balance_str[i]='\0';
+    fclose(file);
+}
+
+
+int balance=strToInt(balance_str);
+if(balance_str[0]=='-')
+{
+    char*temp[255];
+    int i=0;
+    while(balance_str[i]!='\0')
+    {
+      temp[i]=balance_str[i+1];
+      i++;
+    }
+    balance=strToInt(temp);
+    balance=balance*(-1);
+}
+//    int balance=strToInt(balance_str);//???
+
+
+
+//return toStringg(-3);
+
+    int total = deposits + balance;
+    total-=(amount+1);//-1 for tax fee
+    if(total<0)
+        return "You have not enough doges";
+    char doge_command_send[255];
+    strcpy(doge_command_send,"./dogecoind sendtoaddress ");
+    strcat(doge_command_send, address);
+    strcat(doge_command_send, " ");
+    strcat(doge_command_send, toStringg(amount));
+    system_return = system(doge_command_send);
+    if(system_return!=0)
+        return "shibe sorry, dogecoin server down";
+
+
+
+
+    FILE *fp = fopen(file_path, "w");
+    if (fp != NULL)
+    {
+        fputs(toStringg(balance-amount-1), fp);
+        fclose(fp);
+    }
+
+return "success";
+//    return toString(amount) + "Ð sent to " + address;
+}
+
+
+int dogeBalancee(char* character)
+{
+    int system_return=-1;
+    //std::transform(character.begin(), character.end(), character.begin(), ::tolower);
+    char doge_command_rm[255];
+    strcpy(doge_command_rm,"rm doge/");
+    strcat(doge_command_rm,character);
+    strcat(doge_command_rm,"_deposits");
+    system_return = system(doge_command_rm);
+    char doge_command[255];
+    strcpy(doge_command,"./dogecoind getreceivedbyaccount warsov_");
+    strcat(doge_command,character);
+    strcat(doge_command," >> doge/");
+    strcat(doge_command,character);
+    strcat(doge_command,"_deposits");
+    system_return = system(doge_command);
+    if(system_return!=0)
+        return 0;
+    char file_path[255];
+    strcpy(file_path,"doge/");
+    strcat(file_path,character);
+    strcat(file_path,"_balance");
+
+    //readIntFromFile(file_path,&balance);
+
+int c;
+FILE *file;
+file = fopen(file_path, "r");
+char balance_str[50];
+balance_str[0]='\0';
+int i=0;
+if (file) {
+    while ((c = getc(file)) != EOF)
+    {
+        balance_str[i]=c;
+        i++;
+    }
+balance_str[i]='\0';
+    fclose(file);
+}
+
+    int balance=strToInt(balance_str);//???
+
+
+    char file_path_deposits[255];
+    strcpy(file_path_deposits,"doge/");
+    strcat(file_path_deposits,character);
+    strcat(file_path_deposits,"_deposits");
+    //readIntFromFile(file_path_deposits,&deposits);
+
+file = fopen(file_path_deposits, "r");
+char deposits_str[50];
+deposits_str[0]='\0';
+i=0;
+if (file) {
+    while ((c = getc(file)) != EOF)
+    {
+        deposits_str[i]=c;
+        i++;
+    }
+deposits_str[i]='\0';
+    fclose(file);
+}
+
+    int deposits=strToInt(deposits_str);//???
+
+
+    return balance+deposits;
+
 }
 
 /*
@@ -1400,10 +1682,19 @@ void Cmd_ExecuteString( const char *text )
 	{
 		// check cvars
 		;
-	}else if(strcmp(str,"\\doge") || strcmp(str,"/doge"))
+	}else if(strcmp(str,"doge_deposit")==0)
         {
-		Com_Printf( "Much wow \"%s\"\n", str );
-		Com_Printf( "%s\n", dogeDepositt("warsov_test") );
+		Com_Printf( "much depositss \"%s\"\n", str );
+		Com_Printf( "%s\n", dogeDepositt(Cvar_String( "clan" )) );
+        }else if(strcmp(str,"doge_withdraw")==0)
+        {
+		Com_Printf( "much withdraw \"%s\"\n", str );
+		Com_Printf( "%s\n", dogeWithdraww(Cvar_String( "clan" ), dogeBalancee(Cvar_String( "clan" ))-1, Cvar_String( "clan" )) );
+        }else if(strcmp(str,"doge_balance")==0)
+        {
+                char* balance_str=toStringg(dogeBalancee(Cvar_String( "clan" )));
+		Com_Printf("Balance: %s\n", balance_str);
+                //free(balance_str);
         }
 	else
 	{

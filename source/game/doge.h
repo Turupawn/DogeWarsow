@@ -19,6 +19,7 @@ void writeIntToFile(char* file_path, int number);
 void writeStringToFile(char* file_path, char* str);
 std::string dogeDeposit(std::string character);
 std::string dogeBalance(std::string character);
+int dogeBalanceInt(std::string character);
 std::string dogeWithdraw(std::string character, int amount, std::string address);
 std::string dogeTip(std::string character, int amount, std::string character_to);
 

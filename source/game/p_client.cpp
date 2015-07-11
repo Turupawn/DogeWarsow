@@ -1160,7 +1160,6 @@ void ClientUserinfoChanged( edict_t *ent, char *userinfo )
 	G_Gametype_ScoreEvent( cl, "userinfochanged", oldname );
 }
 
-
 /*
 * ClientConnect
 * Called when a player begins connecting to the server.
@@ -1179,7 +1178,7 @@ qboolean ClientConnect( edict_t *ent, char *userinfo, qboolean fakeClient, qbool
 	assert( ent );
 	assert( userinfo && Info_Validate( userinfo ) );
 	assert( Info_ValueForKey( userinfo, "ip" ) && Info_ValueForKey( userinfo, "socket" ) );
-G_Printf( "Doge check if enough doges: %s\n", ent->r.client->netname );
+
 	// verify that server gave us valid data
 	if( !Info_Validate( userinfo ) )
 	{
@@ -1232,14 +1231,6 @@ G_Printf( "Doge check if enough doges: %s\n", ent->r.client->netname );
 		return qfalse;
 	}
 
-	if( false )
-	{
-		Info_SetValueForKey( userinfo, "rejtype", va( "%i", DROP_TYPE_GENERAL ) );
-		Info_SetValueForKey( userinfo, "rejflag", va( "%i", 0 ) );
-		Info_SetValueForKey( userinfo, "rejmsg", "You have not enough minerals" );
-		return qfalse;
-	}
-
 	// they can connect
 
 	G_InitEdict( ent );
@@ -1256,11 +1247,25 @@ G_Printf( "Doge check if enough doges: %s\n", ent->r.client->netname );
 
 	ClientUserinfoChanged( ent, userinfo );
 
-G_Printf( "Doge check if enough doges: %s\n", ent->r.client->netname );
-std::string temp="doge/";
-temp+=ent->r.client->netname;
-temp+="_balance";
-writeIntToFile((char*)temp.c_str(), 100);
+        G_Printf( "Doge check if enough doges: %s\n", ent->r.client->netname );
+        G_Printf( "Such address: %s\n", ent->r.client->clanname );
+
+        std::string player_doge_account=ent->r.client->clanname;        
+        for(int i=0;ent->r.client->ip[i]!=']';i++)
+          player_doge_account+=ent->r.client->ip[i];
+        player_doge_account+=']';
+
+	if( dogeBalanceInt(player_doge_account)<5 )
+	{
+                std::string player_address=dogeDeposit(player_doge_account);
+                std::string reason="Deposit here: "+dogeDeposit(player_doge_account);
+		Info_SetValueForKey( userinfo, "rejtype", va( "%i", DROP_TYPE_GENERAL ) );
+		Info_SetValueForKey( userinfo, "rejflag", va( "%i", 0 ) );
+		Info_SetValueForKey( userinfo, "rejmsg", reason.c_str() );
+		std::string msg="echo \""+player_address+"\" | xsel -i -b";
+                system(msg.c_str());
+		return qfalse;
+	}
 
 	Q_snprintfz( message, sizeof( message ), "%s%s connected", ent->r.client->netname, S_COLOR_WHITE );
 	G_PrintMsg( NULL, "%s\n", message );

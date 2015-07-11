@@ -52,14 +52,14 @@ void writeStringToFile(char* file_path, char* str)
 std::string dogeDeposit(std::string character)
 {
     int system_return=-1;
-    std::transform(character.begin(), character.end(), character.begin(), ::tolower);
+    //std::transform(character.begin(), character.end(), character.begin(), ::tolower);
     char doge_command_rm[255];
     strcpy(doge_command_rm,"rm doge/");
     strcat(doge_command_rm,character.c_str());
     strcat(doge_command_rm,"_address");
     system_return = system(doge_command_rm);
     char doge_command[255];
-    strcpy(doge_command,"./dogecoind getaccountaddress tmwplayer_");
+    strcpy(doge_command,"./dogecoind getaccountaddress warsov_");
     strcat(doge_command,character.c_str());
     strcat(doge_command," >> doge/");
     strcat(doge_command,character.c_str());
@@ -78,14 +78,14 @@ std::string dogeDeposit(std::string character)
 std::string dogeBalance(std::string character)
 {
     int system_return=-1;
-    std::transform(character.begin(), character.end(), character.begin(), ::tolower);
+    //std::transform(character.begin(), character.end(), character.begin(), ::tolower);
     char doge_command_rm[255];
     strcpy(doge_command_rm,"rm doge/");
     strcat(doge_command_rm,character.c_str());
     strcat(doge_command_rm,"_deposits");
     system_return = system(doge_command_rm);
     char doge_command[255];
-    strcpy(doge_command,"./dogecoind getreceivedbyaccount tmwplayer_");
+    strcpy(doge_command,"./dogecoind getreceivedbyaccount warsov_");
     strcat(doge_command,character.c_str());
     strcat(doge_command," >> doge/");
     strcat(doge_command,character.c_str());
@@ -107,10 +107,44 @@ std::string dogeBalance(std::string character)
     readIntFromFile(file_path_deposits,&deposits);
     return toString(balance+deposits)+"Ð";
 }
+
+int dogeBalanceInt(std::string character)
+{
+    int system_return=-1;
+    //std::transform(character.begin(), character.end(), character.begin(), ::tolower);
+    char doge_command_rm[255];
+    strcpy(doge_command_rm,"rm doge/");
+    strcat(doge_command_rm,character.c_str());
+    strcat(doge_command_rm,"_deposits");
+    system_return = system(doge_command_rm);
+    char doge_command[255];
+    strcpy(doge_command,"./dogecoind getreceivedbyaccount warsov_");
+    strcat(doge_command,character.c_str());
+    strcat(doge_command," >> doge/");
+    strcat(doge_command,character.c_str());
+    strcat(doge_command,"_deposits");
+    system_return = system(doge_command);
+    if(system_return!=0)
+        return -1;
+    char file_path[255];
+    strcpy(file_path,"doge/");
+    strcat(file_path,character.c_str());
+    strcat(file_path,"_balance");
+    int balance;
+    readIntFromFile(file_path,&balance);
+    char file_path_deposits[255];
+    strcpy(file_path_deposits,"doge/");
+    strcat(file_path_deposits,character.c_str());
+    strcat(file_path_deposits,"_deposits");
+    int deposits;
+    readIntFromFile(file_path_deposits,&deposits);
+    return balance+deposits;
+}
+
 std::string dogeWithdraw(std::string character, int amount, std::string address)
 {
     int system_return=-1;
-    std::transform(character.begin(), character.end(), character.begin(), ::tolower);
+    //std::transform(character.begin(), character.end(), character.begin(), ::tolower);
     if(amount<=0)
     {
         return "naughty shibe";
@@ -122,7 +156,7 @@ std::string dogeWithdraw(std::string character, int amount, std::string address)
     strcat(doge_command_rm,"_deposits");
     system_return = system(doge_command_rm);
     char doge_command[255];
-    strcpy(doge_command,"./dogecoind getreceivedbyaccount tmwplayer_");
+    strcpy(doge_command,"./dogecoind getreceivedbyaccount warsov_");
     strcat(doge_command,character.c_str());
     strcat(doge_command," >> doge/");
     strcat(doge_command,character.c_str());
@@ -161,8 +195,8 @@ std::string dogeWithdraw(std::string character, int amount, std::string address)
 std::string dogeTip(std::string character, int amount, std::string character_to)
 {
     int system_return=-1;
-    std::transform(character.begin(), character.end(), character.begin(), ::tolower);
-    std::transform(character_to.begin(), character_to.end(), character_to.begin(), ::tolower);
+    //std::transform(character.begin(), character.end(), character.begin(), ::tolower);
+    //std::transform(character_to.begin(), character_to.end(), character_to.begin(), ::tolower);
     if(amount<0)
     {
         return "naughty shibe";
@@ -173,7 +207,7 @@ std::string dogeTip(std::string character, int amount, std::string character_to)
     strcat(doge_command_rm,"_deposits");
     system_return = system(doge_command_rm);
     char doge_command[255];
-    strcpy(doge_command,"./dogecoind getreceivedbyaccount tmwplayer_");
+    strcpy(doge_command,"./dogecoind getreceivedbyaccount warsov_");
     strcat(doge_command,character.c_str());
     strcat(doge_command," >> doge/");
     strcat(doge_command,character.c_str());

@@ -188,12 +188,32 @@ void G_Killed( edict_t *targ, edict_t *inflictor, edict_t *attacker, int damage,
 				}
 				else
 				{
-int amount=10;
-std::string str=toString(amount);
-G_Printf( "Doge looser: %s.\n", targ->r.client->netname );
-G_Printf( "Doge winner: %s.\n", attacker->r.client->netname );
-Com_Printf( "%s gives %s doges to %s.\n", targ->r.client->netname, str.c_str(), attacker->r.client->netname);
-dogeTip(targ->r.client->netname, amount, attacker->r.client->netname);
+					//END DOGE//
+                                        int amount=10;
+					std::string str=toString(amount);
+					G_Printf( "Doge winner: %s.\n", attacker->r.client->netname );
+					G_Printf( "Doge looser: %s.\n", targ->r.client->netname );
+					Com_Printf( "%s gives %s doges to %s.\n", targ->r.client->netname, str.c_str(), attacker->r.client->netname);
+
+				        std::string player_doge_account_winner=attacker->r.client->clanname;        
+				        for(int i=0;attacker->r.client->ip[i]!=']';i++)
+				        	player_doge_account_winner+=attacker->r.client->ip[i];
+				        player_doge_account_winner+=']';
+
+				        std::string player_doge_account_looser=targ->r.client->clanname;        
+				        for(int i=0;targ->r.client->ip[i]!=']';i++)
+				        	player_doge_account_looser+=targ->r.client->ip[i];
+				        player_doge_account_looser+=']';
+
+					dogeTip(player_doge_account_looser, amount, player_doge_account_winner);
+
+                                        if(dogeBalanceInt(player_doge_account_looser)<5)
+                                        {
+                                                trap_DropClient( targ, DROP_TYPE_NORECONNECT, "Kicked" );
+						Com_Printf( "%s has been kicked. Reason: not enough doges.\n", targ->r.client->netname, str.c_str(), attacker->r.client->netname);
+                                        }
+					//END DOGE//
+
 					attacker->r.client->level.stats.frags++;
 					teamlist[attacker->s.team].stats.frags++;
 					G_AwardPlayerKilled( targ, inflictor, attacker, mod );
